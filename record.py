@@ -137,6 +137,7 @@ def parse_proxy_host_port(proxy_str):
 
 
 if __name__ == '__main__':
+    # 处理输入参数
     parser = argparse.ArgumentParser(
         description='TwitCasting live stream recorder.')
 
@@ -155,24 +156,28 @@ if __name__ == '__main__':
     args = parser.parse_args()
     print("Args:", args)
 
-    # record_twitcasting(args.user_id, proxy=args.proxy, user_agent=args.user_agent, filename=args.filename)
 
+    # 在后台每隔一段时间检测T台是否直播，若开始直播，进行录制并保存文件。
     while True:
         log_prefix = '[' + \
             time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) + ']'
 
+        # 获取直播的视频链接
         stream_url = get_stream_url(
             args.user_id, proxy=args.proxy, user_agent=args.user_agent)
         print(f"{log_prefix} stream_url: {stream_url}")
 
+        # 如果能获取到视频链接，则开始直播，进行录制
         if stream_url != None:
             record_twitcasting(args.user_id, proxy=args.proxy,
                                user_agent=args.user_agent, filename=args.filename)
             print(f"{log_prefix} Record finished.")
 
+            # 用ffmpeg进行转码
             filename = args.filename if args.filename else datetime.now().strftime(
                 'record_' + args.user_id + '_%Y%m%d_%H%M%S.ts')
             ffmpeg_convert = f"ffmpeg -i {filename}.ts -codec copy {filename}.mp4"
-            os.system(ffmpeg_convert)
+            os.system(ffmpeg_convert) # 转码并非必要，这一步如果不需要可以注释掉
+            print(f"{log_prefix} Convert finished.")
 
         time.sleep(int(args.iterval))
