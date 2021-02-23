@@ -5,6 +5,10 @@ A python script automatically records TwitCasting stream in the background.
 ## Install Dependencies
 Install dependencies with `pip install -r requirements.txt`.
 
+usage: `python3 record.py [-h] [--proxy PROXY] [--user-agent USER_AGENT] [-t ITERVAL] user_id`
+
+user_id refers to the name after `https://twitcasting.tv/` such as `hima_asmr`, `natsuiromatsuri`
+
 ## Get Help
 ```
 python3 record.py -h
