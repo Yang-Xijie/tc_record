@@ -154,7 +154,6 @@ if __name__ == '__main__':
     args = parser.parse_args()
     print("Args:", args)
 
-
     # 在后台每隔一段时间检测T台是否直播，若开始直播，进行录制并保存文件。
     while True:
         log_prefix = '[' + \
@@ -167,6 +166,7 @@ if __name__ == '__main__':
 
         # 如果能获取到视频链接，则开始直播，进行录制
         if stream_url != None:
+
             filename = datetime.now().strftime(
                 'record_' + args.user_id + '_%Y%m%d_%H%M%S.ts')
 
@@ -175,8 +175,8 @@ if __name__ == '__main__':
             print(f"{log_prefix} Record finished.")
 
             # 用ffmpeg进行转码
-            ffmpeg_convert = f"ffmpeg -i {filename}.ts -codec copy {filename}.mp4"
-            os.system(ffmpeg_convert) # 转码并非必要，这一步如果不需要可以注释掉
+            ffmpeg_convert = f"ffmpeg -i {filename} -codec copy {filename}.mp4"
+            os.system(ffmpeg_convert)  # 转码并非必要，这一步如果不需要可以注释掉
             print(f"{log_prefix} Convert finished.")
 
         time.sleep(int(args.iterval))
