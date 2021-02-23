@@ -145,8 +145,6 @@ if __name__ == '__main__':
         '--proxy', help='Request with HTTP proxy. e.g. http://127.0.0.1:1080')
     parser.add_argument('--user-agent', help='Request with custom User Agent.',
                         default='Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101 Firefox/68.0')
-    parser.add_argument('-o', '--output', dest='filename',
-                        help='File name to save recorded video.')
     parser.add_argument(
         'user_id', help='The user id to record. i.e. the string after "https://twitcasting.tv/" in URL')
     parser.add_argument(
@@ -169,13 +167,14 @@ if __name__ == '__main__':
 
         # 如果能获取到视频链接，则开始直播，进行录制
         if stream_url != None:
+            filename = datetime.now().strftime(
+                'record_' + args.user_id + '_%Y%m%d_%H%M%S.ts')
+
             record_twitcasting(args.user_id, proxy=args.proxy,
-                               user_agent=args.user_agent, filename=args.filename)
+                               user_agent=args.user_agent, filename=filename)
             print(f"{log_prefix} Record finished.")
 
             # 用ffmpeg进行转码
-            filename = args.filename if args.filename else datetime.now().strftime(
-                'record_' + args.user_id + '_%Y%m%d_%H%M%S.ts')
             ffmpeg_convert = f"ffmpeg -i {filename}.ts -codec copy {filename}.mp4"
             os.system(ffmpeg_convert) # 转码并非必要，这一步如果不需要可以注释掉
             print(f"{log_prefix} Convert finished.")
