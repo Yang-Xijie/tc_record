@@ -32,16 +32,41 @@ optional arguments:
 ```
 
 ## About Convert
-
 Recorded videos are saved as MPEG-2 TS format, which is designed for live streaming.
 
-You can simply remux them to MP4 format using ffmpeg:
+We use `ffmpeg` to convert that format, which **requires `ffmpeg` on your computer**.
+
+If you don't want to convert `.ts` file to `.mp4` file or ffmpeg is not installed , just comment lines in the script.
+
+# Create executable file
+Use `pyinstaller` to do that in order to package the script to make it easier to use. (**Notice**: Just packaging instead of compiling.)
 
 ```
-ffmpeg -i xxx.ts -codec copy xxx.mp4
+pip3 install pyinstaller
+pyinstaller -F -w record.py
 ```
+
+`-F` means making script to executable file.
+
+`-w` closes the debugging window.
+
+Use `pyinstaller record.py --onefile` on windows to avoid being recognized as virus.
+
+You can find executable file in `dist` folder in current wording directory.
+
+# Others
+## Generate requirements.txt 
+```
+pip install pipreqs
+pipreqs ./
+```
+Generate requirements.txt which avoids including packages in Path. 
 
 # References
 [GitHub | twitcasting-recorder](https://github.com/printempw/twitcasting-recorder)
 
 [GitHub | live-stream-recorder](https://github.com/printempw/live-stream-recorder)
+
+[如何编译python使之成为可执行程序](http://www.360doc.com/content/19/0918/22/277688_861872169.shtml)
+
+[CSDN | pyinstaller 生成exe之后不报毒的终极方法](https://blog.csdn.net/eastdawnc/article/details/113813790)
